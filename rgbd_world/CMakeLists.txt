@@ -32,4 +32,15 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
+install(
+  DIRECTORY
+    launch
+    meshes
+    rviz
+    urdf
+    world
+  DESTINATION
+    share/${PROJECT_NAME}/
+)
+
 ament_package()
