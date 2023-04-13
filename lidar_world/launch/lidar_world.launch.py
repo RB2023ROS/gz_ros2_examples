@@ -46,7 +46,8 @@ def generate_launch_description():
 
     pkg_gazebo_ros = FindPackageShare(package='gazebo_ros').find('gazebo_ros')   
     pkg_path = os.path.join(get_package_share_directory('lidar_world'))
-    world_path = os.path.join(pkg_path, 'worlds', 'colorful_world.world')
+    # world_path = os.path.join(pkg_path, 'worlds', 'colorful_world.world')
+    world_path = os.path.join(pkg_path, 'worlds', 'empty_world.world')
     
     # Start Gazebo server
     start_gazebo_server_cmd = IncludeLaunchDescription(
@@ -114,13 +115,13 @@ def generate_launch_description():
             arg_show_rviz,
             start_gazebo_server_cmd,
             start_gazebo_client_cmd,
-            robot_state_publisher,
-            spawn_entity,
-            RegisterEventHandler(
-                event_handler=OnProcessExit(
-                    target_action=spawn_entity,
-                    on_exit=[rviz_node],
-                )
-            ),
+            # robot_state_publisher,
+            # spawn_entity,
+            # RegisterEventHandler(
+            #     event_handler=OnProcessExit(
+            #         target_action=spawn_entity,
+            #         on_exit=[rviz_node],
+            #     )
+            # ),
         ]
     )
