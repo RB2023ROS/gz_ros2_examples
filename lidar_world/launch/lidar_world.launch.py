@@ -31,7 +31,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 def generate_launch_description():
 
     # gz model path edit
-    gazebo_model_path = os.path.join(get_package_share_directory('robot_gazebo'), 'models')
+    gazebo_model_path = os.path.join(get_package_share_directory('lidar_world'), 'models')
     if 'GAZEBO_MODEL_PATH' in os.environ:
         os.environ['GAZEBO_MODEL_PATH'] += ":" + gazebo_model_path
     else :
@@ -45,7 +45,7 @@ def generate_launch_description():
     )
 
     pkg_gazebo_ros = FindPackageShare(package='gazebo_ros').find('gazebo_ros')   
-    pkg_path = os.path.join(get_package_share_directory('robot_gazebo'))
+    pkg_path = os.path.join(get_package_share_directory('lidar_world'))
     world_path = os.path.join(pkg_path, 'worlds', 'colorful_world.world')
     
     # Start Gazebo server
@@ -65,7 +65,7 @@ def generate_launch_description():
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [FindPackageShare("robot_gazebo"), "urdf", "sensor_stick.urdf.xacro"]
+                [FindPackageShare("lidar_world"), "urdf", "sensor_stick.urdf.xacro"]
             ),
         ]
     )
