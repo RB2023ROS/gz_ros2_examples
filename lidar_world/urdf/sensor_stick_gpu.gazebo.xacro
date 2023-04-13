@@ -22,7 +22,7 @@
 
   <!-- Gazebo requires the velodyne_gazebo_plugins package -->
   <gazebo reference="velodyne">
-    <sensor type="ray" name="block_laser_sensor">
+    <sensor type="gpu_ray" name="block_laser_sensor">
       <ray>
         <scan>
           <horizontal>

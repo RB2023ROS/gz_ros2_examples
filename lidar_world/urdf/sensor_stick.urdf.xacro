@@ -12,6 +12,7 @@
 
   <!--Import gazebo elements-->
   <xacro:include filename="$(find lidar_world)/urdf/sensor_stick.gazebo.xacro" />
+  <xacro:include filename="$(find lidar_world)/urdf/sensor_stick_gpu.gazebo.xacro" />
 
   <!--Links-->
   <link name="world"/>
