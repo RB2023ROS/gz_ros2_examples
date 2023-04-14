@@ -36,6 +36,7 @@ install(
   DIRECTORY
     launch
     meshes
+    models
     rviz
     urdf
     world
