@@ -30,7 +30,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 def generate_launch_description():
 
     # gz model path edit
-    gazebo_model_path = os.path.join(get_package_share_directory('src_gazebo'), 'models')
+    gazebo_model_path = os.path.join(get_package_share_directory('rgbd_world'), 'models')
     if 'GAZEBO_MODEL_PATH' in os.environ:
         os.environ['GAZEBO_MODEL_PATH'] += ":" + gazebo_model_path
     else :
