@@ -142,9 +142,7 @@ aluminum peripherial evaluation case.
   </joint>
   <link name="${name}_color_optical_frame"/>
 
-
   <gazebo reference="${name}_link">
-
     <xacro:if value="${flag_color}" >
       <sensor name="${name}_rgb_sensor" type="camera">
       <always_on>0</always_on>
@@ -173,11 +171,118 @@ aluminum peripherial evaluation case.
       <plugin name="${name}_color_controller" filename="libgazebo_ros_camera.so">
         <!-- <updateRate>0.0</updateRate> -->
         <camera_name>${name}/color</camera_name>
-        <remapping>${name}/color/image_raw:=${name}/custom_image</remapping>
+        <!-- <remapping>${name}/color/image_raw:=${name}/custom_image</remapping> -->
         <frame_name>${name}_color_optical_frame</frame_name>
         <!--<hackBaseline>0.07</hackBaseline>-->
         <hack_baseline>0.0</hack_baseline>
       </plugin>
+      </sensor>
+    </xacro:if>
+
+    <xacro:if value="${flag_ir}" >
+      <sensor name="${name}_left_ired_sensor" type="camera">
+        <always_on>0</always_on>
+        <pose frame="${name}_left_ir_optical_frame">0 0 0 0 0 0</pose>
+        <camera name="${name}">
+          <horizontal_fov>1.211258501</horizontal_fov><!--69.4 deg = 1.211258501 rad -->
+          <aspect_ratio>1.777777778</aspect_ratio><!-- 16:9-->
+          <image>
+            <width>1920</width>
+            <height>1080</height>
+            <format>L_INT8</format>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.05</stddev>
+          </noise>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>${updaterate}</update_rate>
+        <visualize>0</visualize>
+        <plugin name="{name}_left_ir_controller" filename="libgazebo_ros_camera.so">
+          <camera_name>${name}/left_ir</camera_name>
+          <!-- <imageTopicName>image_raw</imageTopicName> -->
+          <!-- <cameraInfoTopicName>camera_info</cameraInfoTopicName> -->
+          <frame_name>${name}_left_ir_optical_frame</frame_name>
+          <!--<hack_baseline>0.07</hack_baseline>-->
+          <hack_baseline>0.0</hack_baseline>
+        </plugin>
+      </sensor>
+  
+      <sensor name="${name}_right_ired_sensor" type="camera">
+        <always_on>0</always_on>
+        <pose frame="${name}_right_ir_optical_frame">0 0 0 0 0 0</pose>
+        <camera name="${name}">
+          <horizontal_fov>1.211258501</horizontal_fov><!--69.4 deg = 1.211258501 rad -->
+          <aspect_ratio>1.777777778</aspect_ratio><!-- 16:9-->
+          <image>
+            <width>1920</width>
+            <height>1080</height>
+            <format>L_INT8</format>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.05</stddev>
+          </noise>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>${updaterate}</update_rate>
+        <visualize>0</visualize>
+        <plugin name="{name}_right_ir_controller" filename="libgazebo_ros_camera.so">
+          <!-- <updateRate>0.0</updateRate> -->
+          <camera_name>${name}/right_ir</camera_name>
+          <!-- <imageTopicName>image_raw</imageTopicName> -->
+          <!-- <cameraInfoTopicName>camera_info</cameraInfoTopicName> -->
+          <frame_name>${name}_right_ir_optical_frame</frame_name>
+          <!--<hack_baseline>0.07</hack_baseline>-->
+          <hack_baseline>0.0</hack_baseline>
+        </plugin>
+      </sensor>
+    </xacro:if>
+  
+    <xacro:if value="${flag_depth}" >
+      <sensor name="${name}_depth_sensor" type="depth">
+        <always_on>0</always_on>
+        <pose frame="${name}_depth_optical_frame">0 -0.03 0.004 0 0 0</pose>
+        <camera name="${name}">
+          <horizontal_fov>1.211258501</horizontal_fov><!--69.4 deg = 1.211258501 rad -->
+          <aspect_ratio>1.777777778</aspect_ratio><!-- 16:9-->
+          <image>
+            <width>1920</width>
+            <height>1080</height>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.100</stddev>
+          </noise>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>${updaterate}</update_rate>
+        <visualize>0</visualize>
+        <plugin name="{name}_depth_controller" filename="libgazebo_ros_camera.so">
+          <!-- <updateRate>0.0</updateRate> -->
+          <camera_name>${name}/depth</camera_name>
+          <!-- <imageTopicName>image_raw</imageTopicName> -->
+          <!-- <cameraInfoTopicName>camera_info</cameraInfoTopicName> -->
+          <frame_name>${name}_depth_optical_frame</frame_name>
+          <!--<hack_baseline>0.07</hack_baseline>-->
+          <hack_baseline>0.0</hack_baseline>
+        </plugin>
       </sensor>
     </xacro:if>
 

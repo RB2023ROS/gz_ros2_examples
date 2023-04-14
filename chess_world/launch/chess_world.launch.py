@@ -28,6 +28,48 @@ from launch_ros.substitutions import FindPackageShare
 from ament_index_python.packages import get_package_share_directory
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
+def robot_spawn_nodes(id, xacro_name, pkg_path):
+    # Get URDF via xacro
+    robot_description_content = Command(
+        [
+            PathJoinSubstitution([FindExecutable(name="xacro")]),
+            " ",
+            PathJoinSubstitution(
+                [FindPackageShare("chess_world"), "urdf", xacro_name]
+            ),
+        ]
+    )
+
+    robot_description = {"robot_description": robot_description_content}
+
+    robot_state_publisher = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        namespace=f'camera_{id}',
+        output='screen',
+        parameters=[robot_description]
+    )
+
+    # Spawn Robot
+    spawn_entity = Node(
+        package='gazebo_ros', 
+        executable='spawn_entity.py',
+        namespace=f'camera_{id}',
+        arguments=[
+            '-topic', 'robot_description',
+            '-entity', f'd435_camera_{id}',
+            '-x', str(0),
+            '-y', str(0.0),
+            '-Y', str(0.0),
+        ],
+        output='screen'
+    )
+
+    return [
+        robot_state_publisher,
+        spawn_entity,
+    ]
+
 def generate_launch_description():
 
     # gz model path edit
@@ -66,41 +108,7 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration("start_rviz"))
     )
 
-    # Get URDF via xacro
-    robot_description_content = Command(
-        [
-            PathJoinSubstitution([FindExecutable(name="xacro")]),
-            " ",
-            PathJoinSubstitution(
-                [FindPackageShare("chess_world"), "urdf", "camera_left.urdf.xacro"]
-            ),
-        ]
-    )
-
-    robot_description = {"robot_description": robot_description_content}
-
-    robot_state_publisher = Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        output='screen',
-        parameters=[robot_description]
-    )
-
-    # Spawn Robot
-    spawn_entity = Node(
-        package='gazebo_ros', 
-        executable='spawn_entity.py',
-        arguments=[
-            '-topic', 'robot_description',
-            '-entity', 'd435_camera',
-            '-x', str(0),
-            '-y', str(0.0),
-            '-Y', str(0.0),
-        ],
-        output='screen'
-    )
-
-    rviz_config_file = os.path.join(pkg_path, 'rviz', 'lidar_view.rviz')
+    rviz_config_file = os.path.join(pkg_path, 'rviz', 'chess_world.rviz')
     
     rviz_node = Node(
         package="rviz2",
@@ -110,19 +118,17 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration("start_rviz"))
     )
 
+    cam1_spawn = robot_spawn_nodes(0, "camera_left.urdf.xacro", pkg_path)
+    cam2_spawn = robot_spawn_nodes(1, "camera_right.urdf.xacro", pkg_path)
+
     return LaunchDescription(
         [
             arg_show_rviz,
-            # start_gazebo_server_cmd,
-            # start_gazebo_client_cmd,
-            # static_transform_publisher,
-            robot_state_publisher,
-            # spawn_entity,
-            # RegisterEventHandler(
-            #     event_handler=OnProcessExit(
-            #         target_action=spawn_entity,
-            #         on_exit=[rviz_node],
-            #     )
-            # ),
+            start_gazebo_server_cmd,
+            start_gazebo_client_cmd,
+            static_transform_publisher,
+            *cam1_spawn,
+            *cam2_spawn,
+            rviz_node,
         ]
     )
