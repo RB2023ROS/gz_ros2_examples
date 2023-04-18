@@ -117,11 +117,11 @@ def generate_launch_description():
             start_gazebo_client_cmd,
             robot_state_publisher,
             spawn_entity,
-            RegisterEventHandler(
-                event_handler=OnProcessExit(
-                    target_action=spawn_entity,
-                    on_exit=[rviz_node],
-                )
-            ),
+            # RegisterEventHandler(
+            #     event_handler=OnProcessExit(
+            #         target_action=spawn_entity,
+            #         on_exit=[rviz_node],
+            #     )
+            # ),
         ]
     )
