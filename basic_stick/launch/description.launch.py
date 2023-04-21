@@ -23,7 +23,7 @@ def generate_launch_description():
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [FindPackageShare("lidar_world"), "urdf", "sensor_stick.urdf.xacro"]
+                [FindPackageShare("basic_stick"), "urdf", "sensor_stick.urdf.xacro"]
             ),
         ]
     )
