@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<robot>
+  <!--base_link-->
+  <gazebo reference="base_link">
+    <material>Gazebo/White</material>
+  </gazebo>
+
+  <!--link_1-->
+  <gazebo reference="link_1">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Orange</material>
+  </gazebo>
+
+  <!--link_2-->
+  <gazebo reference="link_2">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/White</material>
+  </gazebo>
+
+  <!--camera_link-->
+  <gazebo reference="camera_link">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <gazebo reference="camera_rgb_frame">
+    <sensor type="depth" name="depth_cam">
+      <!-- Set always_on only sensor, not on plugin -->
+      <always_on>0</always_on>
+      <!-- Set update_rate only sensor, not on plugin -->
+      <update_rate>60</update_rate>
+      <camera name="sensor_stick_depth_cam">
+        <horizontal_fov>1.92</horizontal_fov>
+        <image>
+          <width>1280</width>
+          <height>720</height>
+          <!-- R8G8B8 will make all objects bule -->
+          <format>B8G8R8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <distortion>
+        </distortion>
+        <noise>
+        </noise>
+      </camera>
+
+      <plugin name="depth_camera_controller" filename="libgazebo_ros_camera.so">
+        <ros>
+          <namespace>sensor_stick</namespace>
+        </ros>
+        <!-- Set camera name. If empty, defaults to sensor name (i.e. "sensor_name") -->
+        <camera_name>depth_camera</camera_name>
+        <!-- Set TF frame name. If empty, defaults to link name (i.e. "link_name") -->
+        <frame_name>camera_rgb_optical_frame</frame_name>
+        <!-- No need to repeat distortion parameters or to set autoDistortion -->
+        <min_depth>0.001</min_depth>
+        <max_depth>300.0</max_depth>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+</robot>
