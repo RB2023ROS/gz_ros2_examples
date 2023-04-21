@@ -63,6 +63,6 @@ def generate_launch_description():
         [
             start_gazebo_server_cmd,
             start_gazebo_client_cmd,
-            static_transform_publisher,
+            # static_transform_publisher,
         ]
     )
