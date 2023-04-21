@@ -17,4 +17,30 @@
     <color rgba="0 0 0.8 1"/>
   </material>
 
+  <gazebo reference="base_link">
+    <material>Gazebo/Silver</material>
+    <mu1>0.5</mu1>
+    <mu2>0.5</mu2>
+    <selfCollide>true</selfCollide>
+    <gravity>true</gravity>
+  </gazebo>
+  <gazebo reference="lidar">
+    <material>Gazebo/Blue</material>
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+  <gazebo reference="right_wheel">
+    <material>Gazebo/Black</material>
+    <mu1>100000.0</mu1>
+    <mu2>100000.0</mu2>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+  <gazebo reference="left_wheel">
+    <material>Gazebo/Black</material>
+    <mu1>100000.0</mu1>
+    <mu2>100000.0</mu2>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+
 </robot>
