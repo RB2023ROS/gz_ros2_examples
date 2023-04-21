@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot name="sensor_stick" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="basic_stick" xmlns:xacro="http://www.ros.org/wiki/xacro">
   <xacro:property name="PI" value="3.14159"/>
   <xacro:property name="mass1" value="10" />
   <xacro:property name="mass2" value="1" />
@@ -10,8 +10,6 @@
   <xacro:property name="length2" value="0.1" /> <!--link_3 length-->
   <xacro:property name="mass_camera" value="0.2" />
 
-  <!--Import gazebo elements-->
-  <!-- <xacro:include filename="$(find sensor_stick)/urdf/sensor_stick.gazebo.xacro" /> -->
 
   <!--Links-->
   <link name="world"/>
@@ -68,28 +66,6 @@
     </inertial>
   </link>
 
-
-  <!-- RGBD camera -->
-  <!-- <link name="camera_link">
-  <collision>
-    <origin xyz="-0.016 0 0" rpy="0 0 0"/>
-    <geometry>
-      <box size="0.036 0.18 0.04"/>
-    </geometry>
-  </collision>
-  <visual>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="$(find basic_stick)/meshes/asus_xtion.dae"/>
-    </geometry>
-  </visual>
-  <inertial>
-    <mass value="${mass_camera}" />
-    <origin xyz="0 0 0" rpy="0 0 0"/>
-    <inertia ixx="5.8083e-4" ixy="0" ixz="0" iyy="3.0833e-5" iyz="0" izz="5.9083e-4" />
-  </inertial>
-  </link> -->
-
   <!--Joints-->
   <joint name="fixed_base_joint" type="fixed">
     <parent link="world"/>
@@ -102,37 +78,6 @@
     <child link="link_2"/>
     <!-- <axis xyz="0 0 1"/> -->
     <origin xyz="0 0 ${length1/2+length2/2}" rpy="0 0 -${pi/2}"/>
-  </joint>
-
-  <joint name="tilt_joint" type="fixed">
-    <origin xyz="0.05 0 ${length2/2+0.02}" rpy="0 0.5 0" />
-    <parent link="link_2" />
-    <child link="camera_link" />
-    <!-- <axis xyz="0 1 0"/> -->
-  </joint>
-  <link name="camera_rgb_frame" />
-  <joint name="camera_rgb_joint" type="fixed">
-    <origin rpy="0 0 0" xyz="0 0.022 0" />
-    <parent link="camera_link" />
-    <child link="camera_rgb_frame" />
-  </joint>
-  <link name="camera_rgb_optical_frame" />
-  <joint name="camera_rgb_optical_joint" type="fixed">
-    <origin rpy="-1.57079632679 0 -1.57079632679" xyz="0 0 0" />
-    <parent link="camera_rgb_frame" />
-    <child link="camera_rgb_optical_frame" />
-  </joint>
-  <link name="camera_depth_frame" />
-  <joint name="camera_depth_joint" type="fixed">
-    <origin rpy="0 0 0" xyz="0 0.049 0" />
-    <parent link="camera_link" />
-    <child link="camera_depth_frame" />
-  </joint>
-  <link name="camera_depth_optical_frame" />
-  <joint name="camera_depth_optical_joint" type="fixed">
-    <origin rpy="-1.57079632679 0 -1.57079632679" xyz="0 0 0" />
-    <parent link="camera_depth_frame" />
-    <child link="camera_depth_optical_frame" />
   </joint>
 
 </robot>

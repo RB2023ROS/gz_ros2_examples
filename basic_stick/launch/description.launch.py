@@ -1,3 +1,6 @@
+import os
+from ament_index_python.packages import get_package_share_directory
+
 from launch import LaunchDescription
 from launch.substitutions import Command, FindExecutable, PathJoinSubstitution
 
@@ -13,7 +16,7 @@ def generate_launch_description():
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [FindPackageShare("basic_stick"), "urdf", "basic_stick.xacro"]
+                [FindPackageShare("basic_stick"), "urdf", "basic_stick_desc.xacro"]
             ),
         ]
     )
@@ -28,12 +31,16 @@ def generate_launch_description():
         parameters=[robot_description],
     )
 
+    pkg_path = os.path.join(get_package_share_directory('basic_stick'))
+    rviz_config_file = os.path.join(pkg_path, 'rviz', 'desc.rviz')
+
     # Launch RViz
     rviz = Node(
         package='rviz2',
         executable='rviz2',
         name='rviz2',
         output='screen',
+        arguments=["-d", rviz_config_file],
     )
 
     return LaunchDescription([
