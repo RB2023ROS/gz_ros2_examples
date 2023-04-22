@@ -95,12 +95,12 @@ def generate_launch_description():
 
     return LaunchDescription(
         [
-            # start_gazebo_server_cmd,
-            # start_gazebo_client_cmd,
+            start_gazebo_server_cmd,
+            start_gazebo_client_cmd,
             robot_state_publisher,
-            # spawn_entity,
+            spawn_entity,
 
-            # fp_controller,
-            # jsb_controller,
+            fp_controller,
+            jsb_controller,
         ]
     )
