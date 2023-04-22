@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!-- ref github - diffbot_system.ros2_control.xacro -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <ros2_control name="GazeboSystem" type="system">
+    <!-- Gazebo -->
+    <hardware>
+      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+    </hardware>
+
+    <joint name="tilt_joint">
+      <command_interface name="position">
+        <param name="min">-1.5707</param>
+        <param name="max">1.5707</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+
+  </ros2_control>
+
+  <gazebo>
+    <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+        <parameters>$(find basic_stick)/config/joint_controller.yaml</parameters>
+    </plugin>
+  </gazebo>
+
+</robot>

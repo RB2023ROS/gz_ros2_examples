@@ -30,24 +30,10 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 def generate_launch_description():
 
-    # gz model path edit
-    gazebo_model_path = os.path.join(get_package_share_directory('lidar_world'), 'models')
-    if 'GAZEBO_MODEL_PATH' in os.environ:
-        os.environ['GAZEBO_MODEL_PATH'] += ":" + gazebo_model_path
-    else :
-        os.environ['GAZEBO_MODEL_PATH'] = gazebo_model_path
-    print(ansi("yellow"), "If it's your 1st time to download Gazebo model on your computer, it may take few minutes to finish.", ansi("reset"))
-
-    arg_show_rviz = DeclareLaunchArgument(
-        "start_rviz",
-        default_value="true",
-        description="start RViz automatically with the launch file",
-    )
-
+    pkg_path = os.path.join(get_package_share_directory('basic_stick'))
+    
     pkg_gazebo_ros = FindPackageShare(package='gazebo_ros').find('gazebo_ros')   
-    pkg_path = os.path.join(get_package_share_directory('lidar_world'))
-    world_path = os.path.join(pkg_path, 'worlds', 'colorful_world.world')
-    # world_path = os.path.join(pkg_path, 'worlds', 'empty_world.world')
+    world_path = os.path.join(pkg_path, 'worlds', 'empty_world.world')
     
     # Start Gazebo server
     start_gazebo_server_cmd = IncludeLaunchDescription(
@@ -66,11 +52,10 @@ def generate_launch_description():
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [FindPackageShare("lidar_world"), "urdf", "sensor_stick.urdf.xacro"]
+                [FindPackageShare("basic_stick"), "urdf", "moving_stick.xacro"]
             ),
         ]
     )
-
     robot_description = {"robot_description": robot_description_content}
 
     robot_state_publisher = Node(
@@ -78,12 +63,6 @@ def generate_launch_description():
         executable='robot_state_publisher',
         output='screen',
         parameters=[robot_description]
-    )
-
-    joint_state_publisher = Node(
-        package='joint_state_publisher',
-        executable='joint_state_publisher',
-        name='joint_state_publisher'
     )
 
     # Spawn Robot
@@ -100,28 +79,28 @@ def generate_launch_description():
         output='screen'
     )
 
-    rviz_config_file = os.path.join(pkg_path, 'rviz', 'lidar_view.rviz')
-    
-    rviz_node = Node(
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2",
-        arguments=["-d", rviz_config_file],
-        condition=IfCondition(LaunchConfiguration("start_rviz"))
+    fp_controller = Node(
+        package="controller_manager",
+        executable="spawner.py",
+        arguments=["forward_position_controller"],
+        output="screen",
+    )
+
+    jsb_controller = Node(
+        package="controller_manager",
+        executable="spawner.py",
+        arguments=["joint_state_broadcaster"],
+        output="screen",
     )
 
     return LaunchDescription(
         [
-            arg_show_rviz,
             start_gazebo_server_cmd,
             start_gazebo_client_cmd,
             robot_state_publisher,
             spawn_entity,
-            RegisterEventHandler(
-                event_handler=OnProcessExit(
-                    target_action=spawn_entity,
-                    on_exit=[rviz_node],
-                )
-            ),
+
+            fp_controller,
+            jsb_controller,
         ]
     )

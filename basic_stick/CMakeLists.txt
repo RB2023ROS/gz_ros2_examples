@@ -37,6 +37,7 @@ install(
     launch
     meshes
     worlds
+    config
     urdf
     rviz
   DESTINATION
