@@ -2,6 +2,7 @@
 <robot name="fusionbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:include filename="$(find fusionbot_description)/urdf/materials.xacro" />
+  <!-- <xacro:include filename="$(find fusionbot_description)/urdf/fusionbot.gazebo" /> -->
 
   <link name='base_footprint' />
 
