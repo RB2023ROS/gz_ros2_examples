@@ -148,11 +148,12 @@
       <static>true</static>
       <pose>2.8 -6.2 0.1 0 0 0</pose>
     </include>
-    <include>
+    
+    <!-- <include>
       <uri>model://robot</uri>
       <pose>0 0 0.7 3.141592654 0 3.141592654</pose>
       <static>false</static>
-    </include>
+    </include> -->
 
   </world>
 </sdf>

@@ -35,6 +35,7 @@ endif()
 install(
   DIRECTORY
     launch
+    meshes
     models
     rviz
     urdf

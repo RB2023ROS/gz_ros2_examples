@@ -12,7 +12,7 @@
 
   <!--Import gazebo elements-->
   <!-- <xacro:include filename="$(find lidar_world)/urdf/sensor_stick.gazebo.xacro" /> -->
-  <!-- <xacro:include filename="$(find lidar_world)/urdf/sensor_stick_gpu.gazebo.xacro" /> -->
+  <xacro:include filename="$(find lidar_world)/urdf/sensor_stick_gpu.gazebo.xacro" />
 
   <!--Links-->
   <link name="world"/>
@@ -78,7 +78,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="$(find velodyne_description)/meshes/VLP16_base_1.dae"/>
+        <mesh filename="$(find lidar_world)/meshes/VLP16_base_1.dae"/>
       </geometry>
     </visual>
     <collision>
@@ -97,7 +97,7 @@
     <visual>
       <origin xyz="0 0 -0.0377"/>
       <geometry>
-        <mesh filename="$(find velodyne_description)/meshes/VLP16_scan.dae"/>
+        <mesh filename="$(find lidar_world)/meshes/VLP16_scan.dae"/>
       </geometry>
     </visual>
   </link>
@@ -110,7 +110,7 @@
     <visual>
       <origin xyz="0 0 -0.0377"/>
       <geometry>
-        <mesh filename="$(find velodyne_description)/meshes/VLP16_base_2.dae"/>
+        <mesh filename="$(find lidar_world)/meshes/VLP16_base_2.dae"/>
       </geometry>
     </visual>
   </link>
