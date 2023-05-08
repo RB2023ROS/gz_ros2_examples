@@ -11,6 +11,7 @@ ros2 launch lidar_world lidar_world.launch.py
 
 ```
 ros2 launch rgbd_world depth_world.launch.py
+ros2 launch rgbd_world pointnet_world.launch.py
 ```
 
 ```

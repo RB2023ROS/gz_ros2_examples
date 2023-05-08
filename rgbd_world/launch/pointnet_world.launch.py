@@ -1,4 +1,4 @@
-# Copyright 2023 Road Balance Inc. All rights reserved.
+# Copyright 2020 ros2_control Development Team
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,17 +23,30 @@ from launch.substitutions import Command, FindExecutable, LaunchConfiguration, P
 from launch.actions import IncludeLaunchDescription, TimerAction
 from launch_ros.actions import Node
 
-from launch.event_handlers import OnProcessExit
 from launch_ros.substitutions import FindPackageShare
 from ament_index_python.packages import get_package_share_directory
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 def generate_launch_description():
 
-    pkg_path = os.path.join(get_package_share_directory('fusionbot_description'))
-    
+    # gz model path edit
+    gazebo_model_path = os.path.join(get_package_share_directory('rgbd_world'), 'models')
+    if 'GAZEBO_MODEL_PATH' in os.environ:
+        os.environ['GAZEBO_MODEL_PATH'] += ":" + gazebo_model_path
+    else :
+        os.environ['GAZEBO_MODEL_PATH'] = gazebo_model_path
+    print(ansi("yellow"), "If it's your 1st time to download Gazebo model on your computer, it may take few minutes to finish.", ansi("reset"))
+
+
+    arg_show_rviz = DeclareLaunchArgument(
+        "start_rviz",
+        default_value="true",
+        description="start RViz automatically with the launch file",
+    )
+
     pkg_gazebo_ros = FindPackageShare(package='gazebo_ros').find('gazebo_ros')   
-    world_path = os.path.join(pkg_path, 'worlds', 'empty_world.world')
+    pkg_path = os.path.join(get_package_share_directory('rgbd_world'))
+    world_path = os.path.join(pkg_path, 'world', 'empty_world.world')
     
     # Start Gazebo server
     start_gazebo_server_cmd = IncludeLaunchDescription(
@@ -52,10 +65,11 @@ def generate_launch_description():
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [FindPackageShare("fusionbot_description"), "urdf", "fusionbot.urdf.xacro"]
+                [FindPackageShare("rgbd_world"), "urdf", "sensor_stick.urdf.xacro"]
             ),
         ]
     )
+
     robot_description = {"robot_description": robot_description_content}
 
     robot_state_publisher = Node(
@@ -79,18 +93,29 @@ def generate_launch_description():
             '-topic', 'robot_description',
             '-entity', 'sensor_stick',
             '-x', str(0),
-            '-y', str(0.0),
-            '-Y', str(0.0),
+            '-y', str(0),
+            '-Y', str(1.5707),
         ],
         output='screen'
     )
 
+    rviz_config_file = os.path.join(pkg_path, 'rviz', 'depth_cam.rviz')
+    
+    rviz_node = Node(
+        package="rviz2",
+        executable="rviz2",
+        name="rviz2",
+        arguments=["-d", rviz_config_file],
+        condition=IfCondition(LaunchConfiguration("start_rviz"))
+    )
+
     return LaunchDescription(
         [
+            arg_show_rviz,
             start_gazebo_server_cmd,
             start_gazebo_client_cmd,
             robot_state_publisher,
-            joint_state_publisher,
             spawn_entity,
+            rviz_node,
         ]
     )
