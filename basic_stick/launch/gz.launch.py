@@ -53,6 +53,7 @@ def generate_launch_description():
             " ",
             PathJoinSubstitution(
                 [FindPackageShare("basic_stick"), "urdf", "basic_stick_desc.xacro"]
+                # [FindPackageShare("basic_stick"), "urdf", "basic_stick.xacro"]
             ),
         ]
     )
