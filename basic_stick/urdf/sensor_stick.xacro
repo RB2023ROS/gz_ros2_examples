@@ -11,8 +11,8 @@
   <xacro:property name="mass_camera" value="0.2" />
 
   <!--Import gazebo elements-->
-  <!-- <xacro:include filename="$(find basic_stick)/urdf/sensor_stick_mono.gazebo.xacro" /> -->
-  <xacro:include filename="$(find basic_stick)/urdf/sensor_stick_depth.gazebo.xacro" />
+  <xacro:include filename="$(find basic_stick)/urdf/sensor_stick_mono.gazebo.xacro" />
+  <!-- <xacro:include filename="$(find basic_stick)/urdf/sensor_stick_depth.gazebo.xacro" /> -->
 
   <!--Links-->
   <link name="world"/>
