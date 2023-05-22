@@ -17,3 +17,7 @@ ros2 launch rgbd_world pointnet_world.launch.py
 ```
 ros2 launch tf2_world tf2_world.launch.py
 ```
+
+```
+ros2 launch fusionbot_description office_construction.launch.py 
+```

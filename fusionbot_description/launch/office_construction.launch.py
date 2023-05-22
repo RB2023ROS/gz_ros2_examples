@@ -47,7 +47,7 @@ def generate_launch_description():
     )
     
     # Get URDF via xacro
-    robot_description_content = Command(
+    world_description_content = Command(
         [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
@@ -56,11 +56,49 @@ def generate_launch_description():
             ),
         ]
     )
+    world_description = {"robot_description": world_description_content}
+
+    world_state_publisher = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        name='world_state_publisher',
+        output='screen',
+        parameters=[world_description],
+        remappings=[
+            ('robot_description', 'world_description'),
+            # ('/tf_static', 'tf_static')
+        ]
+    )
+
+    # Spawn Robot
+    world_spawn_entity = Node(
+        package='gazebo_ros', 
+        executable='spawn_entity.py',
+        arguments=[
+            '-topic', 'world_description',
+            '-entity', 'office_world',
+            '-x', str(0),
+            '-y', str(0.0),
+            '-Y', str(0.0),
+        ],
+        output='screen'
+    )
+
+    robot_description_content = Command(
+        [
+            PathJoinSubstitution([FindExecutable(name="xacro")]),
+            " ",
+            PathJoinSubstitution(
+                [FindPackageShare("fusionbot_description"), "urdf", "fusionbot.urdf.xacro"]
+            ),
+        ]
+    )
     robot_description = {"robot_description": robot_description_content}
 
     robot_state_publisher = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
+        name='robot_state_publisher',
         output='screen',
         parameters=[robot_description]
     )
@@ -77,7 +115,7 @@ def generate_launch_description():
         executable='spawn_entity.py',
         arguments=[
             '-topic', 'robot_description',
-            '-entity', 'office_world',
+            '-entity', 'fusionbot',
             '-x', str(0),
             '-y', str(0.0),
             '-Y', str(0.0),
@@ -85,12 +123,17 @@ def generate_launch_description():
         output='screen'
     )
 
+
     return LaunchDescription(
         [
             start_gazebo_server_cmd,
             start_gazebo_client_cmd,
+            
+            world_state_publisher,
             robot_state_publisher,
-            # joint_state_publisher,
+            joint_state_publisher,
+            
+            world_spawn_entity,
             spawn_entity,
         ]
     )
