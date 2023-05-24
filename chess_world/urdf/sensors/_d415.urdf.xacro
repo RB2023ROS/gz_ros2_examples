@@ -274,7 +274,7 @@ aluminum peripherial evaluation case.
         <always_on>1</always_on>
         <update_rate>${updaterate}</update_rate>
         <visualize>0</visualize>
-        <plugin name="{name}_depth_controller" filename="libgazebo_ros_camera.so">
+        <plugin name="${name}_depth_controller" filename="libgazebo_ros_camera.so">
           <!-- <updateRate>0.0</updateRate> -->
           <camera_name>${name}/depth</camera_name>
           <!-- <imageTopicName>image_raw</imageTopicName> -->
